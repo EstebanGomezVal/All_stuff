@@ -15,12 +15,13 @@ df = df[['Close','High','Low','Open', 'Volume']]
 df['HL_PCT'] = (df['High'] - df['Close']) / df['Close'] * 100
 df['PCT_change'] = (df['Close'] - df['Open']) / df['Open'] * 100
 
+#         price      x           x           x
 df = df[['Close', 'HL_PCT', 'PCT_change', 'Volume']]
 
 forecast_col = 'Close'
 # df.fillna(-99999, inplace=True)
 
-forecast_out = int(math.ceil(0.01*len(df)))
+forecast_out = int(math.ceil(0.1*len(df)))
 
 df['label'] = df[forecast_col].shift(-forecast_out)
  
@@ -34,13 +35,13 @@ y = np.array(df['label'])
 
 X_train , X_test, y_train, y_test = model_selection.train_test_split(X, y, test_size=0.2)
 
-# clf = LinearRegression()
-# clf.fit(X_train, y_train)
+clf = LinearRegression()
+clf.fit(X_train, y_train)
 # with open('linearregresion.pickle', 'wb') as f:
 #     pickle.dump(clf, f)
 
-pickle_in = open('linearregresion.pickle', 'rb')
-clf = pickle.load(pickle_in)
+# pickle_in = open('linearregresion.pickle', 'rb')
+# clf = pickle.load(pickle_in)
 
 accuracy = clf.score(X_test, y_test)
 # print(accuracy)
